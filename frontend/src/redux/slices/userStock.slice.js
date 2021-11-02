@@ -4,10 +4,10 @@ import { publicFetch } from "../../utils/fetch";
 
 export const getUserStocks = createAsyncThunk(
 	"userStock/getUserStocks",
-	async (_, { dispatch, rejectWithValue, getState }) => {
+	async (data, { dispatch, rejectWithValue, getState }) => {
 		try {
 			const response = await publicFetch.get(
-				`/api/stock?page=1&limit=10`
+				`/api/stock?page=${data.page + 1}&limit=${data.rowPerPage}`
 			);
 			return response.data;
 		} catch (error) {
@@ -68,7 +68,7 @@ const userStock = createSlice({
 		},
 		[getUserStocks.fulfilled]: (state, { payload }) => {
 			state.data = payload.result;
-			state.totalCount = payload.total;
+			state.totalCount = payload.totalCount;
 			state.page = payload.page;
 			state.status = "SUCCESS";
 		},

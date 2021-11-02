@@ -8,13 +8,18 @@ import Typography from "@material-ui/core/Typography";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { Switch, Route, Redirect, NavLink } from "react-router-dom";
+import {
+	Switch,
+	Route,
+	Redirect,
+	NavLink,
+	useLocation,
+} from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import HomeIcon from "@material-ui/icons/Home";
 import CategoryIcon from "@material-ui/icons/Category";
 import CustomizedSnackbar from "./Snackbar/CustomizedSnackbar";
 import { Grid } from "@material-ui/core";
-import { useDispatch } from "react-redux";
 import Stocks from "../pages/Stocks";
 const drawerWidth = 240;
 
@@ -43,7 +48,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DashboardSideBar() {
 	const classes = useStyles();
-	const dispatch = useDispatch();
+	const location = useLocation();
+	console.log(location.pathname);
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
@@ -72,7 +78,10 @@ export default function DashboardSideBar() {
 							to="/dashboard"
 							style={{ textDecoration: "none", color: "inherit" }}
 						>
-							<ListItem button>
+							<ListItem
+								button
+								selected={location.pathname === "/dashboard"}
+							>
 								<ListItemIcon>
 									<HomeIcon />
 								</ListItemIcon>
@@ -83,7 +92,10 @@ export default function DashboardSideBar() {
 							to="/stock"
 							style={{ textDecoration: "none", color: "inherit" }}
 						>
-							<ListItem button>
+							<ListItem
+								button
+								selected={location.pathname === "/stock"}
+							>
 								<ListItemIcon>
 									<CategoryIcon />
 								</ListItemIcon>

@@ -21,7 +21,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import { makeStyles } from "@material-ui/core/styles";
 import { getStockName } from "../../redux/slices/stockName.slice";
 import { addUserStocks } from "../../redux/slices/userStock.slice";
-import { SUCCESS } from "../../utils/status";
+import { FAILED, SUCCESS } from "../../utils/status";
 
 const useStyles = makeStyles((theme) => ({
 	textField: {
@@ -67,6 +67,8 @@ export default function AddStockDialog({ setOpen, open }) {
 			setTransactionType("");
 			setPrice("");
 			setQuantity("");
+		} else if (userStockState.addStatus === FAILED) {
+			handleClose();
 		}
 	}, [userStockState]);
 
@@ -209,7 +211,8 @@ export default function AddStockDialog({ setOpen, open }) {
 				<DialogActions>
 					<Button onClick={handleSubmit} color="primary">
 						{userStockState.addStatus === "" ||
-						userStockState.addStatus === "SUCCESS" ? (
+						userStockState.addStatus === "SUCCESS" ||
+						userStockState.addStatus === FAILED ? (
 							"Add Stock"
 						) : (
 							<CircularProgress size={17} />

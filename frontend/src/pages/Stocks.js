@@ -38,14 +38,16 @@ function Stocks() {
 	const classes = useStyles();
 	// states
 	const [open, setOpen] = useState(false);
+	const [page, setPage] = useState(0);
+	const [rowPerPage, setRowPerPage] = useState(10);
 
 	const dispatch = useDispatch();
 
 	const userStockState = useSelector((state) => state.userStock);
 
 	useEffect(() => {
-		dispatch(getUserStocks());
-	}, [dispatch]);
+		dispatch(getUserStocks({ page, rowPerPage }));
+	}, [dispatch, page, rowPerPage]);
 
 	const columns = [
 		{
@@ -59,6 +61,10 @@ function Stocks() {
 		{
 			name: "quantity",
 			label: "Quantity",
+		},
+		{
+			name: "amount",
+			label: "Amount",
 		},
 		{
 			name: "price",
@@ -95,15 +101,35 @@ function Stocks() {
 		);
 	}
 
+	const options = {
+		selectableRows: false,
+		responsive: "scrollFullHeight",
+		filters: false,
+
+		serverSide: true,
+		//count, // Use total number of items
+		count: userStockState.totalCount, // Unknown number of items
+		page: page,
+		onTableChange: (action, tableState) => {
+			console.log(action, tableState);
+			if (action === "changePage") {
+				console.log("Go to page", tableState.page);
+				setPage(tableState.page);
+			}
+			if (action === "changeRowsPerPage") {
+				console.log("row count", tableState.rowsPerPage);
+				setRowPerPage(tableState.rowPerPage);
+			}
+		},
+	};
+
 	return (
 		<div>
 			<MUIDataTable
 				title={"Stocks"}
 				data={userStockState.data}
 				columns={columns}
-				options={{
-					selectableRows: false,
-				}}
+				options={options}
 			/>
 			<Fab
 				className={classes.fab}
